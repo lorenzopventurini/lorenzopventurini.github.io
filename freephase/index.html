@@ -1,7 +1,432 @@
-<!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+<!doctype html>
+<html lang="en-GB">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>EDF FreePhase Tracker – Energy Trackers</title>
+		<meta
+			name="description"
+			content="Tracks the daily price of the EDF FreePhase Dynamic electricity tariff in the UK and notifies you of upcoming periods of free electricity."
+		/>
+		<meta name="theme-color" content="#0b1220" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="EDF FreePhase Tracker" />
+		<meta
+			property="og:description"
+			content="Track EDF FreePhase Dynamic daily prices in the UK and get notified about upcoming free electricity periods."
+		/>
+		<meta property="og:image" content="assets/screenshot.png" />
+		<meta property="og:image:alt" content="EDF FreePhase Tracker app screenshot" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="EDF FreePhase Tracker" />
+		<meta
+			name="twitter:description"
+			content="Track daily prices and get notified about free electricity periods."
+		/>
+		<meta name="twitter:image" content="assets/screenshot.png" />
+
+		<link rel="icon" href="assets/icon.png" />
+
+		<style>
+			:root {
+				--bg0: #070a12;
+				--bg1: #0b1220;
+				--card: rgba(255, 255, 255, 0.06);
+				--card2: rgba(255, 255, 255, 0.09);
+				--text: rgba(255, 255, 255, 0.92);
+				--muted: rgba(255, 255, 255, 0.7);
+				--muted2: rgba(255, 255, 255, 0.55);
+				--line: rgba(255, 255, 255, 0.12);
+				--accent: #6ee7ff;
+				--accent2: #a78bfa;
+				--shadow: 0 22px 70px rgba(0, 0, 0, 0.55);
+				--radius: 20px;
+				--radius2: 16px;
+				--max: 1080px;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				height: 100%;
+			}
+
+			body {
+				margin: 0;
+				font-family:
+					ui-sans-serif,
+					system-ui,
+					-apple-system,
+					Segoe UI,
+					Roboto,
+					Helvetica,
+					Arial,
+					"Apple Color Emoji",
+					"Segoe UI Emoji";
+				color: var(--text);
+				background:
+					radial-gradient(1000px 600px at 16% 12%, rgba(110, 231, 255, 0.14), transparent 60%),
+					radial-gradient(900px 700px at 88% 30%, rgba(167, 139, 250, 0.14), transparent 58%),
+					radial-gradient(900px 650px at 40% 95%, rgba(110, 231, 255, 0.08), transparent 62%),
+					linear-gradient(180deg, var(--bg0), var(--bg1));
+			}
+
+			a {
+				color: inherit;
+			}
+
+			.wrap {
+				max-width: var(--max);
+				margin: 0 auto;
+				padding: 28px 18px 56px;
+			}
+
+			header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 14px;
+				padding: 10px 0 24px;
+			}
+
+			.brand {
+				display: inline-flex;
+				align-items: center;
+				gap: 12px;
+				text-decoration: none;
+			}
+
+			.brand img {
+				width: 44px;
+				height: 44px;
+				border-radius: 12px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+			}
+
+			.brand .name {
+				display: flex;
+				flex-direction: column;
+				line-height: 1.15;
+			}
+
+			.brand .name strong {
+				font-size: 14px;
+				letter-spacing: 0.02em;
+			}
+
+			.brand .name span {
+				font-size: 12px;
+				color: var(--muted);
+			}
+
+			nav {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				flex-wrap: wrap;
+				justify-content: flex-end;
+			}
+
+			.chip {
+				text-decoration: none;
+				font-size: 13px;
+				padding: 9px 12px;
+				border: 1px solid var(--line);
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.04);
+				color: var(--text);
+			}
+
+			.chip:hover {
+				border-color: rgba(255, 255, 255, 0.24);
+				background: rgba(255, 255, 255, 0.06);
+			}
+
+			.hero {
+				display: grid;
+				grid-template-columns: 1.1fr 0.9fr;
+				gap: 22px;
+				align-items: stretch;
+			}
+
+			.panel {
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+				box-shadow: var(--shadow);
+				overflow: hidden;
+			}
+
+			.panel-inner {
+				padding: 28px;
+			}
+
+			h1 {
+				margin: 0 0 10px;
+				font-size: clamp(30px, 3.6vw, 46px);
+				letter-spacing: -0.02em;
+				line-height: 1.06;
+			}
+
+			.subtitle {
+				margin: 0 0 22px;
+				font-size: 16px;
+				color: var(--muted);
+				line-height: 1.6;
+			}
+
+			.badges {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 10px;
+				margin: 18px 0 0;
+			}
+
+			.badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				font-size: 13px;
+				color: var(--muted);
+				padding: 8px 10px;
+				border-radius: 999px;
+				border: 1px solid var(--line);
+				background: rgba(255, 255, 255, 0.03);
+			}
+
+			.cta {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				margin-top: 18px;
+			}
+
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 10px;
+				border-radius: 14px;
+				padding: 12px 14px;
+				font-weight: 650;
+				letter-spacing: 0.01em;
+				border: 1px solid var(--line);
+				text-decoration: none;
+				background: rgba(255, 255, 255, 0.04);
+			}
+
+			.btn-primary {
+				border-color: rgba(110, 231, 255, 0.32);
+				background: linear-gradient(90deg, rgba(110, 231, 255, 0.16), rgba(167, 139, 250, 0.14));
+			}
+
+			.btn:hover {
+				transform: translateY(-1px);
+				transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+				border-color: rgba(255, 255, 255, 0.26);
+			}
+
+			.btn small {
+				font-weight: 600;
+				color: var(--muted);
+			}
+
+			.features {
+				margin-top: 22px;
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 10px;
+			}
+
+			.feature {
+				padding: 12px 12px;
+				border-radius: var(--radius2);
+				border: 1px solid var(--line);
+				background: rgba(255, 255, 255, 0.03);
+				color: var(--muted);
+				line-height: 1.55;
+			}
+
+			.feature strong {
+				color: var(--text);
+			}
+
+			.shot {
+				position: relative;
+			}
+
+			.shot .panel-inner {
+				padding: 18px;
+			}
+
+			.frame {
+				border-radius: 18px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				background: rgba(0, 0, 0, 0.25);
+				padding: 14px;
+			}
+
+			.frame img {
+				width: 100%;
+				height: auto;
+				display: block;
+				border-radius: 14px;
+				background: rgba(255, 255, 255, 0.02);
+			}
+
+			.foot {
+				margin-top: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 10px;
+				flex-wrap: wrap;
+				color: var(--muted2);
+				font-size: 13px;
+			}
+
+			.foot a {
+				color: var(--muted);
+				text-decoration: none;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+			}
+
+			.foot a:hover {
+				color: var(--text);
+				border-bottom-color: rgba(255, 255, 255, 0.32);
+			}
+
+			@media (max-width: 920px) {
+				.hero {
+					grid-template-columns: 1fr;
+				}
+				nav {
+					justify-content: flex-start;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.btn:hover {
+					transform: none;
+					transition: none;
+				}
+			}
+		</style>
+
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "SoftwareApplication",
+				"name": "EDF FreePhase Tracker",
+				"applicationCategory": "UtilitiesApplication",
+				"operatingSystem": "Android",
+				"offers": {
+					"@type": "Offer",
+					"price": "0",
+					"priceCurrency": "GBP"
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<header>
+				<a class="brand" href="./" aria-label="EDF FreePhase Tracker home">
+					<img src="assets/icon.png" alt="EDF FreePhase Tracker app icon" />
+					<span class="name">
+						<strong>EDF FreePhase Tracker</strong>
+						<span>by Energy Trackers</span>
+					</span>
+				</a>
+				<nav aria-label="Primary">
+					<a class="chip" href="privacy_policy.html">Privacy Policy</a>
+					<a
+						class="chip"
+						href="https://play.google.com/apps/test/com.freephase.freephasepricetracker/7"
+						target="_blank"
+						rel="noopener noreferrer"
+						>Google Play</a
+					>
+				</nav>
+			</header>
+
+			<main class="hero" role="main">
+				<section class="panel" aria-label="App summary">
+					<div class="panel-inner">
+						<h1>Track FreePhase prices. Catch the free hours.</h1>
+						<p class="subtitle">
+							EDF FreePhase Tracker monitors the daily price of the EDF FreePhase Dynamic
+							electricity tariff in the UK and notifies you when upcoming periods of free
+							electricity are announced.
+						</p>
+
+						<div class="cta">
+							<a
+								class="btn btn-primary"
+								href="https://play.google.com/apps/test/com.freephase.freephasepricetracker/7"
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label="Open EDF FreePhase Tracker on Google Play"
+							>
+								Get it on Google Play
+								<small>(Android)</small>
+							</a>
+							<a class="btn" href="privacy_policy.html">Read the Privacy Policy</a>
+						</div>
+
+						<div class="badges" aria-label="Highlights">
+							<span class="badge">UK tariff tracking</span>
+							<span class="badge">Daily price updates</span>
+							<span class="badge">Free electricity alerts</span>
+						</div>
+
+						<div class="features" aria-label="Key features">
+							<div class="feature">
+								<strong>Daily price tracking:</strong> check what the FreePhase Dynamic
+								tariff will cost each day.
+							</div>
+							<div class="feature">
+								<strong>Notifications:</strong> get alerted ahead of upcoming free
+								electricity periods.
+							</div>
+							<div class="feature">
+								<strong>Simple and focused:</strong> a lightweight companion for people on
+								EDF FreePhase in the UK.
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<aside class="panel shot" aria-label="App screenshot">
+					<div class="panel-inner">
+						<div class="frame">
+							<img src="assets/screenshot.png" alt="EDF FreePhase Tracker screenshot" />
+						</div>
+						<div class="foot">
+							<span>© <span id="year"></span> Energy Trackers</span>
+							<span>
+								<a href="privacy_policy.html">Privacy</a>
+								·
+								<a
+									href="https://play.google.com/apps/test/com.freephase.freephasepricetracker/7"
+									target="_blank"
+									rel="noopener noreferrer"
+									>Google Play</a
+							</span>
+						</div>
+					</div>
+				</aside>
+			</main>
+		</div>
+
+		<script>
+			document.getElementById("year").textContent = String(new Date().getFullYear());
+		</script>
+	</body>
 </html>

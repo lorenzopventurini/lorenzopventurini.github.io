@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP — Emily & Lorenzo</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #faf7f2;
+      color: #3a2e2e;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Banner ────────────────────────────────────────── */
+    .banner {
+      width: 100%;
+      max-height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Container ─────────────────────────────────────── */
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    /* ── Language toggle ───────────────────────────────── */
+    .lang-toggle {
+      text-align: right;
+      margin-bottom: 1rem;
+    }
+    .lang-toggle button {
+      background: none;
+      border: 1.5px solid #b08968;
+      color: #b08968;
+      padding: .35rem .9rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: .85rem;
+      transition: .2s;
+    }
+    .lang-toggle button:hover {
+      background: #b08968;
+      color: #fff;
+    }
+
+    /* ── Header ────────────────────────────────────────── */
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .header h1 {
+      font-family: 'Georgia', serif;
+      font-weight: 400;
+      font-size: 2rem;
+      color: #6d4c41;
+      margin-bottom: .35rem;
+    }
+    .header .date-venue {
+      font-size: .95rem;
+      color: #7a6a5e;
+    }
+
+    /* ── Form styles ──────────────────────────────────── */
+    form fieldset {
+      border: none;
+      margin-bottom: 1.5rem;
+    }
+    form legend {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: .6rem;
+      color: #5d4037;
+    }
+
+    label {
+      display: block;
+      margin-bottom: .25rem;
+      font-size: .92rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: .55rem .7rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: .95rem;
+      font-family: inherit;
+      background: #fff;
+      margin-bottom: .75rem;
+      transition: border-color .2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #b08968;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+      margin: .4rem 0 .75rem;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      cursor: pointer;
+      font-size: .95rem;
+    }
+
+    /* ── Guest rows ───────────────────────────────────── */
+    .guest-block {
+      background: #f3ede4;
+      border-radius: 8px;
+      padding: 1rem 1rem .5rem;
+      margin-bottom: .75rem;
+    }
+    .guest-block h3 {
+      font-size: .95rem;
+      margin-bottom: .5rem;
+      color: #6d4c41;
+    }
+    .guest-fields {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
+    }
+
+    #add-guest-btn, #remove-guest-btn {
+      background: none;
+      border: 1.5px dashed #b08968;
+      color: #b08968;
+      padding: .45rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .88rem;
+      margin-right: .5rem;
+      margin-bottom: 1rem;
+      transition: .2s;
+    }
+    #add-guest-btn:hover { background: #f3ede4; }
+    #remove-guest-btn { border-color: #c97070; color: #c97070; }
+    #remove-guest-btn:hover { background: #fdeaea; }
+
+    .max-guests-note {
+      font-size: .82rem;
+      color: #999;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    /* ── Submit ────────────────────────────────────────── */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: .75rem;
+      background: #b08968;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .submit-btn:hover { background: #9a7558; }
+    .submit-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    /* ── Feedback ──────────────────────────────────────── */
+    .feedback {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 1rem;
+      min-height: 1.5rem;
+    }
+    .feedback.success { color: #2e7d32; }
+    .feedback.error { color: #c62828; }
+
+    /* ── Confirmation view ────────────────────────────── */
+    .confirmation {
+      text-align: center;
+      padding: 3rem 1rem;
+      display: none;
+    }
+    .confirmation h2 {
+      font-family: 'Georgia', serif;
+      font-weight: 400;
+      font-size: 1.6rem;
+      color: #6d4c41;
+      margin-bottom: .75rem;
+    }
+    .confirmation p {
+      color: #7a6a5e;
+      font-size: 1rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ── Responsive ────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .header h1 { font-size: 1.55rem; }
+    }
+  </style>
+</head>
+<body>
+
+<img src="assets/banner.JPG" alt="Wedding banner" class="banner" />
+
+<div class="container">
+
+  <!-- Language toggle -->
+  <div class="lang-toggle">
+    <button id="lang-btn" type="button" onclick="toggleLang()">Italiano</button>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1 data-i18n="title">Emily &amp; Lorenzo</h1>
+    <p class="date-venue" data-i18n="dateVenue">23 May 2026 · Corso Italia 34, Genova, Italy</p>
+  </div>
+
+  <!-- ── RSVP form ─────────────────────────────────── -->
+  <form id="rsvp-form" novalidate>
+
+    <!-- Attendance -->
+    <fieldset>
+      <legend data-i18n="attendanceQ">Will you be joining us?</legend>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="attending" value="Yes" required />
+          <span data-i18n="yes">Yes, I'll be there!</span>
+        </label>
+        <label>
+          <input type="radio" name="attending" value="No" required />
+          <span data-i18n="no">Sorry, I can't make it</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <!-- Section shown only when attending = Yes -->
+    <div id="details-section" style="display:none;">
+
+      <!-- Contact email -->
+      <fieldset>
+        <legend data-i18n="contactLegend">Your contact details</legend>
+        <label for="email" data-i18n="emailLabel">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" />
+      </fieldset>
+
+      <!-- Guests -->
+      <fieldset>
+        <legend data-i18n="guestsLegend">Guest details</legend>
+        <div id="guests-wrapper">
+          <!-- Guest blocks injected by JS -->
+        </div>
+        <button type="button" id="add-guest-btn" onclick="addGuest()">
+          <span data-i18n="addGuest">+ Add another guest</span>
+        </button>
+        <button type="button" id="remove-guest-btn" onclick="removeGuest()" style="display:none;">
+          <span data-i18n="removeGuest">− Remove last guest</span>
+        </button>
+        <p class="max-guests-note" id="max-guests-note" data-i18n="maxGuests">Maximum of 4 guests per submission.</p>
+      </fieldset>
+
+      <!-- Notes -->
+      <fieldset>
+        <legend data-i18n="notesLegend">Anything else?</legend>
+        <textarea id="notes" name="notes" data-i18n-placeholder="notesPlaceholder" placeholder="Allergies, song requests, anything you'd like us to know…"></textarea>
+      </fieldset>
+    </div>
+
+    <!-- Section shown only when attending = No -->
+    <div id="decline-section" style="display:none;">
+      <fieldset>
+        <legend data-i18n="declineName">Your name</legend>
+        <input type="text" id="decline-name" name="decline_name" data-i18n-placeholder="declineNamePh" placeholder="Your full name" />
+      </fieldset>
+      <fieldset>
+        <legend data-i18n="declineMsg">Send a message (optional)</legend>
+        <textarea id="decline-notes" name="decline_notes" data-i18n-placeholder="declineMsgPh" placeholder="We'd love to hear from you…"></textarea>
+      </fieldset>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn" disabled>
+      <span data-i18n="submit">Send RSVP</span>
+    </button>
+  </form>
+
+  <div class="feedback" id="feedback"></div>
+
+  <!-- Shown after successful submit -->
+  <div class="confirmation" id="confirmation">
+    <h2 data-i18n="confirmTitle">Thank you!</h2>
+    <p id="confirm-msg" data-i18n="confirmMsg">We've received your RSVP. We can't wait to celebrate with you!</p>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   Google Form field mapping
+   ================================================================
+   Form URL (POST target):
+     https://docs.google.com/forms/d/e/1FAIpQLSe2DRSxhmlcV19n3j83CNo2L2e-O3J_j0RXLymJa8zwuEd3qA/formResponse
+
+   Fields extracted from FB_PUBLIC_LOAD_DATA_:
+     emailAddress    → entry.452429921   (text)
+     Can you attend? → entry.429737366   (radio: "Yes" / "No")
+     Guest 1 Name    → entry.745266862   (text)
+     Guest 1 Dietary → entry.1277756703  (radio: None / Vegetarian / Vegan / Gluten-free / __other_option__)
+     Add guest 1→2   → entry.1689200373  (radio: "Yes" / "No")
+     Guest 2 Name    → entry.973758869   (text)
+     Guest 2 Dietary → entry.2032724639  (radio)
+     Add guest 2→3   → entry.366155592   (radio)
+     Guest 3 Name    → entry.823240811   (text)
+     Guest 3 Dietary → entry.1254167874  (radio)
+     Add guest 3→4   → entry.183485653   (radio)
+     Guest 4 Name    → entry.485890251   (text)
+     Guest 4 Dietary → entry.1182410433  (radio)
+     Add guest 4→end → entry.109288523   (radio)
+     Comments        → entry.1239297934  (textarea)
+   ================================================================ */
+
+const GOOGLE_FORM_ACTION =
+  "https://docs.google.com/forms/d/e/1FAIpQLSe2DRSxhmlcV19n3j83CNo2L2e-O3J_j0RXLymJa8zwuEd3qA/formResponse";
+
+/* Per-guest Google Form entry IDs (up to 4 guests) */
+const GUEST_FIELDS = [
+  { name: "entry.745266862",  dietary: "entry.1277756703", addMore: "entry.1689200373" },
+  { name: "entry.973758869",  dietary: "entry.2032724639", addMore: "entry.366155592"  },
+  { name: "entry.823240811",  dietary: "entry.1254167874", addMore: "entry.183485653"  },
+  { name: "entry.485890251",  dietary: "entry.1182410433", addMore: "entry.109288523"  },
+];
+
+const MAX_GUESTS = GUEST_FIELDS.length; // 4
+
+/* Dietary values must match Google Form option labels exactly.
+   "Other" uses the special value __other_option__ with a sibling
+   field: <entry>.other_option_response for the free-text. */
+const DIET_MAP = {
+  "none":        "None",
+  "vegetarian":  "Vegetarian",
+  "vegan":       "Vegan",
+  "gluten-free": "Gluten-free",
+  "other":       "__other_option__"
+};
+
+/* ================================================================
+   i18n strings
+   ================================================================ */
+const STRINGS = {
+  en: {
+    title: "Emily & Lorenzo",
+    dateVenue: "23 May 2026 · Corso Italia 34, Genova, Italy",
+    attendanceQ: "Will you be joining us?",
+    yes: "Yes, I\u2019ll be there!",
+    no: "Sorry, I can\u2019t make it",
+    contactLegend: "Your contact details",
+    emailLabel: "Email address",
+    guestsLegend: "Guest details",
+    guestNum: "Guest {n}",
+    guestName: "Full name",
+    dietary: "Dietary requirements",
+    dietaryNone: "None",
+    dietaryVegetarian: "Vegetarian",
+    dietaryVegan: "Vegan",
+    dietaryGlutenFree: "Gluten-free",
+    dietaryOther: "Other",
+    dietarySpecify: "Please specify\u2026",
+    addGuest: "+ Add another guest",
+    removeGuest: "\u2212 Remove last guest",
+    maxGuests: "Maximum of 4 guests per submission.",
+    notesLegend: "Anything else?",
+    notesPlaceholder: "Allergies, song requests, anything you\u2019d like us to know\u2026",
+    declineName: "Your name",
+    declineNamePh: "Your full name",
+    declineMsg: "Send a message (optional)",
+    declineMsgPh: "We\u2019d love to hear from you\u2026",
+    submit: "Send RSVP",
+    confirmTitle: "Thank you!",
+    confirmMsg: "We\u2019ve received your RSVP. We can\u2019t wait to celebrate with you!",
+    confirmMsgDecline: "We\u2019re sorry you can\u2019t make it. Thank you for letting us know!",
+    sending: "Sending\u2026",
+    errorGeneric: "Something went wrong. Please try again.",
+    errorRequired: "Please fill in the required fields.",
+    langBtn: "Italiano"
+  },
+  it: {
+    title: "Emily & Lorenzo",
+    dateVenue: "23 maggio 2026 \u00b7 Corso Italia 34, Genova",
+    attendanceQ: "Conferma la vostra partecipazione?",
+    yes: "S\u00ec, ci sar\u00f2!",
+    no: "Purtroppo non posso",
+    contactLegend: "I tuoi recapiti",
+    emailLabel: "Indirizzo email",
+    guestsLegend: "Dettagli degli ospiti",
+    guestNum: "Ospite {n}",
+    guestName: "Nome e cognome",
+    dietary: "Esigenze alimentari",
+    dietaryNone: "Nessuna",
+    dietaryVegetarian: "Vegetariano",
+    dietaryVegan: "Vegano",
+    dietaryGlutenFree: "Senza glutine",
+    dietaryOther: "Altro",
+    dietarySpecify: "Specificare\u2026",
+    addGuest: "+ Aggiungi un altro ospite",
+    removeGuest: "\u2212 Rimuovi l\u2019ultimo ospite",
+    maxGuests: "Massimo 4 ospiti per invio.",
+    notesLegend: "Altro da aggiungere?",
+    notesPlaceholder: "Allergie, richieste musicali, qualsiasi cosa vogliate farci sapere\u2026",
+    declineName: "Il tuo nome",
+    declineNamePh: "Nome e cognome",
+    declineMsg: "Invia un messaggio (facoltativo)",
+    declineMsgPh: "Ci farebbe piacere avere tue notizie\u2026",
+    submit: "Invia RSVP",
+    confirmTitle: "Grazie!",
+    confirmMsg: "Abbiamo ricevuto la tua conferma. Non vediamo l\u2019ora di festeggiare insieme!",
+    confirmMsgDecline: "Ci dispiace che tu non possa venire. Grazie per avercelo fatto sapere!",
+    sending: "Invio in corso\u2026",
+    errorGeneric: "Qualcosa \u00e8 andato storto. Per favore riprova.",
+    errorRequired: "Compila i campi obbligatori.",
+    langBtn: "English"
+  }
+};
+
+/* ── State ──────────────────────────────────────────── */
+let lang = (navigator.language || "en").startsWith("it") ? "it" : "en";
+let guestCount = 0;
+
+/* ── i18n helpers ───────────────────────────────────── */
+function t(key) { return STRINGS[lang][key] || key; }
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.getElementById("lang-btn").textContent = t("langBtn");
+
+  document.querySelectorAll("[data-i18n]").forEach(function(el) {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+
+  // Re-label guest blocks
+  document.querySelectorAll(".guest-block").forEach(function(block, i) {
+    block.querySelector("h3").textContent = t("guestNum").replace("{n}", i + 1);
+    block.querySelector(".lbl-name").textContent = t("guestName");
+    block.querySelector(".lbl-diet").textContent = t("dietary");
+    var sel = block.querySelector("select");
+    sel.options[0].textContent = t("dietaryNone");
+    sel.options[1].textContent = t("dietaryVegetarian");
+    sel.options[2].textContent = t("dietaryVegan");
+    sel.options[3].textContent = t("dietaryGlutenFree");
+    sel.options[4].textContent = t("dietaryOther");
+    var otherInput = block.querySelector(".diet-other-input");
+    if (otherInput) otherInput.placeholder = t("dietarySpecify");
+  });
+}
+
+function toggleLang() {
+  lang = lang === "en" ? "it" : "en";
+  applyLang();
+}
+
+/* ── Guest management ──────────────────────────────── */
+function guestHTML(n) {
+  return '<div class="guest-block" data-guest="' + n + '">' +
+    '<h3>' + t("guestNum").replace("{n}", n) + '</h3>' +
+    '<div class="guest-fields">' +
+      '<div>' +
+        '<label class="lbl-name" for="name_' + n + '">' + t("guestName") + '</label>' +
+        '<input type="text" id="name_' + n + '" name="guest_' + n + '_name" required />' +
+      '</div>' +
+      '<div>' +
+        '<label class="lbl-diet" for="diet_' + n + '">' + t("dietary") + '</label>' +
+        '<select id="diet_' + n + '" name="guest_' + n + '_dietary" onchange="handleDietChange(this)">' +
+          '<option value="none">' + t("dietaryNone") + '</option>' +
+          '<option value="vegetarian">' + t("dietaryVegetarian") + '</option>' +
+          '<option value="vegan">' + t("dietaryVegan") + '</option>' +
+          '<option value="gluten-free">' + t("dietaryGlutenFree") + '</option>' +
+          '<option value="other">' + t("dietaryOther") + '</option>' +
+        '</select>' +
+        '<div class="diet-other-wrap" style="display:none;">' +
+          '<input type="text" class="diet-other-input" name="guest_' + n + '_dietary_other" placeholder="' + t("dietarySpecify") + '" />' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function updateGuestButtons() {
+  document.getElementById("remove-guest-btn").style.display =
+    guestCount > 1 ? "inline-block" : "none";
+  var addBtn = document.getElementById("add-guest-btn");
+  var note   = document.getElementById("max-guests-note");
+  if (guestCount >= MAX_GUESTS) {
+    addBtn.style.display = "none";
+    note.style.display = "block";
+  } else {
+    addBtn.style.display = "inline-block";
+    note.style.display = "none";
+  }
+}
+
+function addGuest() {
+  if (guestCount >= MAX_GUESTS) return;
+  guestCount++;
+  document.getElementById("guests-wrapper")
+    .insertAdjacentHTML("beforeend", guestHTML(guestCount));
+  updateGuestButtons();
+}
+
+function removeGuest() {
+  if (guestCount <= 1) return;
+  var el = document.querySelector('.guest-block[data-guest="' + guestCount + '"]');
+  if (el) el.remove();
+  guestCount--;
+  updateGuestButtons();
+}
+
+function handleDietChange(sel) {
+  var wrap = sel.closest("div").querySelector(".diet-other-wrap");
+  wrap.style.display = sel.value === "other" ? "block" : "none";
+}
+
+/* ── Attendance toggle ─────────────────────────────── */
+var radios = document.querySelectorAll('input[name="attending"]');
+for (var r = 0; r < radios.length; r++) {
+  radios[r].addEventListener("change", function() {
+    var yes = this.value === "Yes";
+    document.getElementById("details-section").style.display = yes ? "block" : "none";
+    document.getElementById("decline-section").style.display = yes ? "none" : "block";
+    document.getElementById("submit-btn").disabled = false;
+    if (yes && guestCount === 0) addGuest();
+  });
+}
+
+/* ================================================================
+   Form submission → Google Forms
+   ================================================================ */
+document.getElementById("rsvp-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  var fb = document.getElementById("feedback");
+  fb.className = "feedback";
+  fb.textContent = "";
+
+  var formData = new FormData(this);
+  var attending = formData.get("attending");
+
+  /* ── Validation ──────────────────────────────────── */
+  if (attending === "Yes") {
+    for (var v = 1; v <= guestCount; v++) {
+      var nm = formData.get("guest_" + v + "_name");
+      if (!nm || !nm.trim()) {
+        fb.className = "feedback error";
+        fb.textContent = t("errorRequired");
+        return;
+      }
+    }
+  }
+  if (attending === "No") {
+    var dn = formData.get("decline_name");
+    if (!dn || !dn.trim()) {
+      fb.className = "feedback error";
+      fb.textContent = t("errorRequired");
+      return;
+    }
+  }
+
+  /* ── Build Google Form URL-encoded body ──────────── */
+  var params = new URLSearchParams();
+
+  // Attendance (radio: "Yes" or "No")
+  params.append("entry.429737366", attending);
+
+  if (attending === "Yes") {
+    // Email
+    params.append("entry.452429921", formData.get("email") || "");
+
+    // Guests (up to 4)
+    for (var i = 0; i < guestCount && i < MAX_GUESTS; i++) {
+      var gf = GUEST_FIELDS[i];
+      var idx = i + 1;
+
+      // Name
+      params.append(gf.name, formData.get("guest_" + idx + "_name") || "");
+
+      // Dietary
+      var dietKey = formData.get("guest_" + idx + "_dietary") || "none";
+      var dietVal = DIET_MAP[dietKey] || "None";
+      params.append(gf.dietary, dietVal);
+
+      // If "Other", send free-text via .other_option_response
+      if (dietKey === "other") {
+        var otherText = formData.get("guest_" + idx + "_dietary_other") || "";
+        params.append(gf.dietary + ".other_option_response", otherText);
+      }
+
+      // "Add another guest?" navigation: Yes if more guests follow, else No
+      params.append(gf.addMore, (i < guestCount - 1) ? "Yes" : "No");
+    }
+
+    // Comments
+    params.append("entry.1239297934", formData.get("notes") || "");
+
+  } else {
+    // Declining: store name in guest-1 name, message in comments
+    params.append("entry.452429921", "");
+    params.append("entry.745266862", formData.get("decline_name") || "");
+    params.append("entry.1277756703", "None");
+    params.append("entry.1689200373", "No");
+    params.append("entry.1239297934", formData.get("decline_notes") || "");
+  }
+
+  /* ── Submit ──────────────────────────────────────── */
+  var submitBtn = document.getElementById("submit-btn");
+  submitBtn.disabled = true;
+  fb.textContent = t("sending");
+
+  // Google Forms does not return CORS headers, so we use no-cors mode.
+  // The response will be opaque (status 0) but the data IS recorded.
+  fetch(GOOGLE_FORM_ACTION, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString()
+  }).then(function() {
+    document.getElementById("rsvp-form").style.display = "none";
+    var conf = document.getElementById("confirmation");
+    conf.style.display = "block";
+    document.getElementById("confirm-msg").textContent =
+      attending === "Yes" ? t("confirmMsg") : t("confirmMsgDecline");
+    fb.textContent = "";
+  }).catch(function() {
+    fb.className = "feedback error";
+    fb.textContent = t("errorGeneric");
+    submitBtn.disabled = false;
+  });
+});
+
+/* ── Init ──────────────────────────────────────────── */
+applyLang();
+</script>
+
+</body>
+</html>

@@ -1,7 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorenzo Venturini</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            color: #555;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .links a {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .links a:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            header {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .section {
+                padding: 30px 20px;
+            }
+
+            .links {
+                flex-direction: column;
+            }
+
+            .links a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <div class="container">
+        <header>
+            <img src="assets/Lorenzo_casual.jpeg" alt="Lorenzo Venturini" class="profile-img">
+            <h1>Lorenzo Venturini</h1>
+            <p class="subtitle">AI Engineer & Researcher</p>
+        </header>
+
+        <div class="section">
+            <h2>About Me</h2>
+            <p>
+                I'm a cofounder and Senior AI Engineer at <strong>Fraiya</strong>, where I build the AI models that power our products. 
+                My background is in medical imaging: I did my DPhil at the <strong>University of Oxford</strong> working on AI for fetal ultrasound, 
+                and before that studied Engineering at the <strong>University of Cambridge</strong> (MEng, Class I with distinction).
+            </p>
+            <p>
+                I grew up in <strong>Genoa</strong> and moved to the UK for university, where I've stayed ever since. 
+                These days I'm based in <strong>London</strong>, splitting my time between building things at Fraiya and 
+                rowing, playing in pub quizzes, and eating too much cheese.
+            </p>
+            <p>
+                Always happy to chat about AI, medical imaging, or potential collaborations: drop me a line if you'd like to connect.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Get in Touch</h2>
+            <div class="links">
+                <a href="https://fraiya.com" target="_blank">Fraiya</a>
+                <a href="https://linkedin.com/in/lorenzopventurini" target="_blank">LinkedIn</a>
+                <a href="https://scholar.google.com" target="_blank">Google Scholar</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>This page was built with the help of <a href="https://claude.ai" target="_blank">Claude</a> ✨</p>
+    </footer>
 </body>
 </html>

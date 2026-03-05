@@ -627,6 +627,18 @@ document.getElementById("rsvp-form").addEventListener("submit", function(e) {
     params.append("entry.1239297934", formData.get("decline_notes") || "");
   }
 
+  /* Google Forms multi-section: tell the server which pages were visited.
+     Section 0 = attendance + email, 1–4 = guest pages, 5 = comments. */
+  params.append("fvv", "1");
+  if (attending === "Yes") {
+    var pages = ["0"];
+    for (var p = 1; p <= guestCount && p <= MAX_GUESTS; p++) pages.push(String(p));
+    pages.push("5");
+    params.append("pageHistory", pages.join(","));
+  } else {
+    params.append("pageHistory", "0,1,5");
+  }
+
   /* ── Submit ──────────────────────────────────────── */
   var submitBtn = document.getElementById("submit-btn");
   submitBtn.disabled = true;
